@@ -49,7 +49,7 @@
           /* Ensure that we are operating with UTF-8 encoding.
            * This command is for MySQL. Other databases may need different commands.
            */
-          $db->exec("SET NAMES 'utf8'");
+          $db->exec("SET NAMES 'utf8mb4'");
 
           /* With PDO we use prepared statements. This saves us from having to escape
            * the username in the database query.
@@ -69,7 +69,7 @@
           }
 
           /* Check the password. */
-          if (! $row['password']===$password) {
+          if (! SimpleSAML\Utils\Crypto::secureCompare($row['password'],$password)) {
               /* Invalid password. */
               SimpleSAML\Logger::warning('sqlOTP: Wrong password for user ' . var_export($username, TRUE) . '.');
               throw new SimpleSAML_Error_Error('WRONGUSERPASS');
@@ -77,7 +77,7 @@
 
           /* Only allow login once. */
           if ($row['used']>0) {
-              /* Invalid password. */
+              /* Was used before. */
               SimpleSAML\Logger::warning('sqlOTP: Password already used for user ' . var_export($username, TRUE) . '.');
               throw new SimpleSAML_Error_Error('WRONGUSERPASS');
           }
@@ -85,7 +85,7 @@
           /* Create the attribute array of the user. */
           $attributes = array(
               'urn:mace:dir:attribute-def:uid' => array($username),
-              'urn:mace:dir:attribute-def:cn' => array($row['fullname']),
+              'urn:mace:dir:attribute-def:cn' => array($username),
               'urn:mace:dir:attribute-def:givenName' => array($row['givenName']),
               'urn:mace:dir:attribute-def:sn' => array($row['sn']),
               'urn:mace:dir:attribute-def:mail' => array($row['mail']),
