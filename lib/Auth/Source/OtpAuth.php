@@ -69,7 +69,7 @@
           }
 
           /* Check the password. */
-          if (! SimpleSAML\Utils\Crypto::secureCompare($row['password'],$password)) {
+          if (! password_verify($password,$row['password'])) {
               /* Invalid password. */
               SimpleSAML\Logger::warning('sqlOTP: Wrong password for user ' . var_export($username, TRUE) . '.');
               throw new SimpleSAML_Error_Error('WRONGUSERPASS');

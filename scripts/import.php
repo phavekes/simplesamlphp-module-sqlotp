@@ -12,7 +12,7 @@ $db->exec("SET NAMES 'utf8mb4'");
 $infile = fopen('import.csv', 'r');
 $outfile = fopen('output.csv', 'w');
 while (($line = fgetcsv($infile)) !== FALSE) {
-  $password=randomPassword();
+  $password=password_hash(randomPassword(),PASSWORD_BCRYPT);
   array_push($line,$password);
   $st = $db->prepare('INSERT INTO users(givenName,sn,mail,schachome,password) values(?,?,?,?,?)');
 
