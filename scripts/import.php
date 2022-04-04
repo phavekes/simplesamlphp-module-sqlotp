@@ -7,7 +7,7 @@ $basedomain='your.base.domain';
 
 $db = new PDO($dsn, $username, $password);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$db->exec("SET NAMES 'utf8'");
+$db->exec("SET NAMES 'utf8mb4'");
 
 $infile = fopen('import.csv', 'r');
 $outfile = fopen('output.csv', 'w');
@@ -32,11 +32,11 @@ fclose($outfile);
 
 
 function randomPassword() {
-    $alphabet = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNOPQRSTUVWXYZ23456789';
+    $alphabet = 'abcdefghjkmnpqrstuvwxyz23456789';
     $pass = array(); //remember to declare $pass as an array
     $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-    for ($i = 0; $i < 6; $i++) {
-        $n = rand(0, $alphaLength);
+    for ($i = 0; $i < 8; $i++) {
+        $n = random_int(0, $alphaLength);
         $pass[] = $alphabet[$n];
     }
     return implode($pass); //turn the array into a string
